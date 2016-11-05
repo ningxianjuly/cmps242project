@@ -50,8 +50,10 @@ if __name__ == '__main__':
                 else:
                     word_diction_neg[word + "_neg"] += 1
     f_write_dataset_pos.write(str(sentence_pos_num) + "\t" + str(word_distinct_pos_num) + "\t" + str(word_pos_num) + "\n")
-    for word_write_pos in word_diction_pos.keys():    
-        f_write_dataset_pos.write(word_write_pos + "\t" + str(word_diction_pos[word_write_pos]) + "\n")
+    for word_write_pos in word_diction_pos.keys():
+        if word_diction_pos[word_write_pos] >= 10000:
+            f_write_dataset_pos.write(word_write_pos + "\t" + str(word_diction_pos[word_write_pos]) + "\n")
     f_write_dataset_neg.write(str(sentence_neg_num) + "\t" + str(word_distinct_neg_num) + "\t" + str(word_neg_num) + "\n")
     for word_write_neg in word_diction_neg.keys(): 
-        f_write_dataset_neg.write(word_write_neg + "\t" + str(word_diction_neg[word_write_neg]) + "\n")
+        if word_diction_neg[word_write_neg] >= 10000:
+            f_write_dataset_neg.write(word_write_neg + "\t" + str(word_diction_neg[word_write_neg]) + "\n")
