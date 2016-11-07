@@ -23,10 +23,10 @@ tfidf_feature.py: The features to generate tf * idf feature which you can use in
 3. Run the naive_bayes.py to get the classication accuracy of training dataset and test dataset. The performances of them are as following:
 </p>
 <p>
-Accuracy of training set: 0.62955 (25182/40000)
+Accuracy of training set: 0.8086 (1383732/1711225)
 </p>
 <p>
-Accuracy of test set: 0.6662 (6662/10000)
+Accuracy of test set: 0.7802 (333789/427807)
 </p>
 <p>
 Decision Tree:
