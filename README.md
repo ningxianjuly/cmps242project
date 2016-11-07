@@ -65,10 +65,10 @@ The decision feature we used :['great', 'good', 'like', 'just', 'get', 'food', '
 3.Run the KNN.py to train the decision tree and use the tree to get the classication accuracy of test dataset.The proformance of the decision tree is as following:                    
 </p>
 <p>
-Accuracy of train set: 0.8687(371663/40000)
+Accuracy of train set: 0.8348(33392/40000)
 </p>
 <p>
-Accuracy of test set: 0.8687(371663/10000)
+Accuracy of test set: 0.8448(8448/10000)
 </p>
 <p>
 The decision feature we used :['a', 'and', 'the', 'i', 'to']
