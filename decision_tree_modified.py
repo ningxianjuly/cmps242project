@@ -81,21 +81,23 @@ def createTree(dataSet, labels):
         myTree[bestFeatLabel][value] = createTree(splitDataSet(dataSet, bestFeat, value), subLabels)
     return myTree
 
-def classify(inputTree, featLabels, testVecs): #Travers the decision tree to get the result
+def classify(inputTree, featLabels, testVec): #Travers the decision tree to get the result
     firstStr = inputTree.keys()[0]
     secondDict = inputTree[firstStr]
     featIndex = featLabels.index(firstStr)
-    classLabels = []
-    for testVec in testVecs:
-        for key in secondDict.keys():
-            if testVec[featIndex] == key:
-                if type(secondDict[key]).__name__ == 'dict':
-                    classLabel = classify(secondDict[key], featLabels, testVec)
-                    classLabels.append(classLabel)
-                else: 
-                    classLabel = secondDict[key]
-                    classLabels.append(classLabel)
-    return classLabels
+    classLabel = 'yes'
+    #classLabels = []
+    #for testVec in testVecs:
+    for key in secondDict.keys():
+        if testVec[featIndex] == key:
+            if type(secondDict[key]).__name__ == 'dict':
+                classLabel = classify(secondDict[key], featLabels, testVec)
+                #classLabels.append(classLabel)
+            else: 
+                classLabel = secondDict[key]
+                #classLabels.append(classLabel)
+    #print classLabel
+    return classLabel
 
 if __name__ == '__main__':
     #if '1' == '1':
@@ -118,6 +120,7 @@ if __name__ == '__main__':
     test_vectors = []
     ylabels_train = []
     labels = []
+    add_labels = []
     test_ylabels = []
     line_num = 0
     #####################################
@@ -163,7 +166,8 @@ if __name__ == '__main__':
         test_ylabels.append(line_str_list[0])
         temp_words_list = temp_text.split(" ")
         for temp_word in word_diction:
-            #labels.append(temp_word)
+            if line_num == 1:
+                add_labels.append(temp_word)
             if str(temp_word) in temp_words_list:
                 temp_words_feature.append(1.0 * (int(temp_words_list.count(str(temp_word)))))
             else:
@@ -177,7 +181,7 @@ if __name__ == '__main__':
     test_ylabels_array = array(test_ylabels)
     print "Test tfidf feature construction finish!"
     print labels
-    print len(labels)
+    #print len(labels)
     #####################################
     #train dataset tranformation of decision tree
     #####################################
@@ -207,21 +211,36 @@ if __name__ == '__main__':
                 temp_single_dataset.append(1)
             else:
                 temp_single_dataset.append(0)
-        if test_ylabels_array[index_dataset] == '1':
-            temp_single_dataset.append('yes')
-        else:
-            temp_single_dataset.append('no')            
+        #if test_ylabels_array[index_dataset] == '1':
+        #    temp_single_dataset.append('yes')
+        #else:
+        #    temp_single_dataset.append('no')            
         test_dataSet.append(temp_single_dataset)
     #####################################
     #get the performance of test dataset
     #####################################
     test_right_num = 0
+    print "Creating tree..."
+    #print len(labels)
     myTree = createTree(train_dataSet,labels)
     print "Creating tree is finished!"
-    predict_test_labels = classify(myTree,labels,test_dataSet)
+    print "Predicting..."
+    predict_test_labels = []
+    item_num = 0
+    for item_test in test_dataSet:
+        item_num += 1
+        #print item_test
+        temp_labels = add_labels
+        #print len(temp_labels)
+        predict_test_label = classify(myTree,temp_labels,item_test)
+        if predict_test_label == 'yes':
+            predict_test_labels.append('1')
+        else:
+            predict_test_labels.append('0')
+        #print predict_test_labels
     print "Predicting is finished!"
     predict_test_labels_array = array(predict_test_labels)
-    for index_item_label in range(test_ylabels_array):
+    for index_item_label in range(len(test_ylabels_array)):
         if test_ylabels_array[index_item_label] == predict_test_labels_array[index_item_label]:
             test_right_num += 1
     print "The classification accuracy of test dataset is(decision_tree):"
