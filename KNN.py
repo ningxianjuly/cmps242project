@@ -165,5 +165,5 @@ if __name__ == '__main__':
         if label_test == y_test:
             test_right_num += 1
     print "Predicting is finished!"
-    print "The classification accuracy of test dataset is(perception):"
+    print "The classification accuracy of test dataset is(KNN):"
     print 1.0 * test_right_num / len(test_dataSet)
