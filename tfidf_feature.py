@@ -51,6 +51,3 @@ if __name__ == '__main__':
     transformer = TfidfTransformer(smooth_idf=False)
     tfidf = transformer.fit_transform(train_vectors_matrix)
     print tfidf.toarray()[0]
-    
-    #train the logistic regression
-    
