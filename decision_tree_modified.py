@@ -123,50 +123,59 @@ if __name__ == '__main__':
     #####################################
     for line in open(file_dataset_train, 'r'):
         line_num += 1
-        print "train_" + str(line_num)
+        if line_num % 5000 == 0:
+            print "Triansets-" + str(line_num) + " lines are handled"
+        #print "train_" + str(line_num)
         line_str_list = line.replace("\n", "").split("\t")
         temp_words_feature = []
         temp_text = line_str_list[1]
         ylabels_train.append(line_str_list[0])
         temp_words_list = temp_text.split(" ")
         for temp_word in word_diction:
-            labels.append(temp_word)
+            if line_num == 1:
+                labels.append(temp_word)
             if str(temp_word) in temp_words_list:
                 temp_words_feature.append(1.0 * (int(temp_words_list.count(str(temp_word)))))
             else:
                 temp_words_feature.append(0.0)
         train_vectors.append(array(temp_words_feature))
     train_vectors_matrix = array(train_vectors)
-    print train_vectors_matrix[0]
+    #print train_vectors_matrix[0]
     transformer = TfidfTransformer(smooth_idf=False)
     tfidf_train = transformer.fit_transform(train_vectors_matrix)
     train_tfidf_array = tfidf_train.toarray()
     train_ylabels_array = array(ylabels_train)
+    print "Train tfidf feature construction finish!"
     #####################################
     #test tfidf feature construction
     #####################################
     line_num = 0
     for line in open(file_dataset_test, 'r'):
         line_num += 1
-        print "test_" + str(line_num)
+        if line_num % 5000 == 0:
+            print "Testsets-" + str(line_num) + " lines are handled"
+        #print "test_" + str(line_num)
         line_str_list = line.replace("\n", "").split("\t")
         temp_words_feature = []
         temp_text = line_str_list[1]
         test_ylabels.append(line_str_list[0])
         temp_words_list = temp_text.split(" ")
         for temp_word in word_diction:
-            labels.append(temp_word)
+            #labels.append(temp_word)
             if str(temp_word) in temp_words_list:
                 temp_words_feature.append(1.0 * (int(temp_words_list.count(str(temp_word)))))
             else:
                 temp_words_feature.append(0.0)
         test_vectors.append(array(temp_words_feature))
     test_vectors_matrix = array(test_vectors)
-    print test_vectors_matrix[0]
+    #print test_vectors_matrix[0]
     transformer = TfidfTransformer(smooth_idf=False)
     tfidf_test = transformer.fit_transform(test_vectors_matrix)
     test_tfidf_array = tfidf_test.toarray()
     test_ylabels_array = array(test_ylabels)
+    print "Test tfidf feature construction finish!"
+    print labels
+    print len(labels)
     #####################################
     #train dataset tranformation of decision tree
     #####################################
