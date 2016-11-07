@@ -14,6 +14,9 @@ naive_bayes.py: Naive bayes classification python file and get the classificatio
 tfidf_feature.py: The features to generate tf * idf feature which you can use in Perception and Decision tree algorithms.   
 </p>
 <p>
+<b>Naive Bayes:</b>
+</p>
+<p>
 1. Run the preprocess_yelp_dataset.py to generate the training dataset and test dataset. 
 </p>
 <p>
@@ -29,7 +32,7 @@ Accuracy of training set: 0.8086 (1383732/1711225)
 Accuracy of test set: 0.7802 (333789/427807)
 </p>
 <p>
-Decision Tree:
+<b>Decision Tree:</b>
 </p>
 <p>
 1. Run the preprocess_yelp_dataset.py to generate the training dataset and test dataset. 
@@ -49,8 +52,8 @@ Accuracy of test set: 0.8687(371663/427807)
 <p>
 The decision feature we used :['great', 'good', 'like', 'just', 'get', 'food', 'one', 'place']
 </p>
-
-KNN:
+<p>
+<b>KNN:</b>
 </p>
 <p>
 1. Run the preprocess_yelp_dataset.py to generate the training dataset and test dataset. 
