@@ -28,3 +28,22 @@ Accuracy of training set: 0.62955 (25182/40000)
 <p>
 Accuracy of test set: 0.6662 (6662/10000)
 </p>
+<p>
+Decision Tree:
+</p>
+<p>
+1. Run the preprocess_yelp_dataset.py to generate the training dataset and test dataset. 
+</p>
+<p>
+2.Run the word_dictionary_lr.py to generate feature dictionary.
+</p>
+<p>
+3.Run the decision_tree_modified.py to train the decision tree and use the tree to get the classication accuracy of test dataset.The proformance of the decision tree is as following:                    
+</p>
+<p>
+Accuracy of test set: 0.8687(371663/427807)
+</p>
+<p>
+The decision feature we used :['great', 'good', 'like', 'just', 'get', 'food', 'one', 'place']
+</p>
+
