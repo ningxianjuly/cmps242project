@@ -14,6 +14,21 @@ naive_bayes.py: Naive bayes classification python file and get the classificatio
 tfidf_feature.py: The features to generate tf * idf feature which you can use in Perception and Decision tree algorithms.   
 </p>
 <p>
+<b>Perception:</b>
+</p>
+<p>
+1. Run the preprocess_yelp_dataset.py to generate the training dataset and test dataset. 
+</p>
+<p>
+2. Run the word_dictionary.py to generate positive words dictionary and negtive words dictionary.
+</p>
+<p>
+3. Run the perception_modified.py to get the classication accuracy of training dataset and test dataset. The performances of them are as following:
+</p>
+<p>
+We can not get the linear hyperplane to separate these points so these points can not classified by a linear hyperplane.
+</p>
+<p>
 <b>Naive Bayes:</b>
 </p>
 <p>
