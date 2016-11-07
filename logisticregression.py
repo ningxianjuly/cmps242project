@@ -148,8 +148,25 @@ if __name__ == '__main__':
         error_final = cost_value(train_tfidf_array, train_ylabels_array, updated_theta)
         print "The cost of " + str(index_iteration) + " iterations is " + str(error_final) + "."
     
-        #test the performance of logistic regression
-        print "Predicting..."
+        #get the performance of trainset utilizing logistic regression
+        print "Predicting training dataset..."
+        predict_train_labels = []
+        item_num = 0
+        train_right_num = 0
+        for item_test in train_tfidf_array:
+            item_num += 1
+            predict_train_prob = cal_sigmoid(item_test, updated_theta)
+            if predict_train_prob >= 0.5 and train_ylabels_array[item_num - 1] == '1':
+                train_right_num += 1
+            if predict_train_prob < 0.5 and train_ylabels_array[item_num - 1] == '0':
+                train_right_num += 1
+            #print predict_test_labels
+        print "Predicting training dataset is finished!"
+        print "The classification accuracy of train dataset is(Logistic Regression):"
+        print 1.0 * train_right_num / len(train_ylabels_array)
+        
+        #get the performance of trainset utilizing logistic regression
+        print "Predicting test dataset..."
         predict_test_labels = []
         item_num = 0
         test_right_num = 0
@@ -161,6 +178,6 @@ if __name__ == '__main__':
             if predict_test_prob < 0.5 and test_ylabels_array[item_num - 1] == '0':
                 test_right_num += 1
             #print predict_test_labels
-        print "Predicting is finished!"
+        print "Predicting test datasetis finished!"
         print "The classification accuracy of test dataset is(Logistic Regression):"
         print 1.0 * test_right_num / len(test_ylabels_array)
