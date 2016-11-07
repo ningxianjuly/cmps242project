@@ -98,6 +98,8 @@ def classify(inputTree, featLabels, testVecs): #Travers the decision tree to get
     return classLabels
 
 if __name__ == '__main__':
+    #if '1' == '1':
+    #    print "Rubbish!"
     file_dataset_word_frequency = '/Users/luotianyi/Desktop/CMPS242/project/'\
     'word_all_frequency_40000_20161105'
     file_dataset_train = '/Users/luotianyi/Desktop/CMPS242/project/'\
@@ -188,7 +190,7 @@ if __name__ == '__main__':
                 temp_single_dataset.append(1)
             else:
                 temp_single_dataset.append(0)
-        if train_ylabels_array[index_dataset] == 1:
+        if train_ylabels_array[index_dataset] == '1':
             temp_single_dataset.append('yes')
         else:
             temp_single_dataset.append('no')            
@@ -205,7 +207,7 @@ if __name__ == '__main__':
                 temp_single_dataset.append(1)
             else:
                 temp_single_dataset.append(0)
-        if test_ylabels_array[index_dataset] == 1:
+        if test_ylabels_array[index_dataset] == '1':
             temp_single_dataset.append('yes')
         else:
             temp_single_dataset.append('no')            
@@ -215,9 +217,10 @@ if __name__ == '__main__':
     #####################################
     test_right_num = 0
     myTree = createTree(train_dataSet,labels)
-    #print myTree
+    print "Creating tree is finished!"
     predict_test_labels = classify(myTree,labels,test_dataSet)
-    predict_test_labels_array = predict_test_labels.toarray()
+    print "Predicting is finished!"
+    predict_test_labels_array = array(predict_test_labels)
     for index_item_label in range(test_ylabels_array):
         if test_ylabels_array[index_item_label] == predict_test_labels_array[index_item_label]:
             test_right_num += 1
