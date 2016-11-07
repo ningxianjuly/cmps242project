@@ -100,7 +100,7 @@ The decision feature we used :['a', 'and', 'the', 'i', 'to']
 3.Run the logisticregressio.py to train the decision tree and use the tree to get the classication accuracy of test dataset.The proformance of the decision tree is as following:                    
 </p>
 <p>
-Accuracy of train set: 0.8687(371663/1711225)
+Accuracy of train set: 0.839350308198(1436317/1711225)
 </p>
 <p>
 Accuracy of test set: 0.86914090646(371894/427807)
