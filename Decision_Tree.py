@@ -1,5 +1,8 @@
 import math
 import operator
+from numpy import *
+from sklearn.feature_extraction.text import TfidfTransformer
+import math
 
 def calcShannonEnt(dataSet): #calculate the shannon value
     numEntries = len(dataSet) #calculate the total number of input data
@@ -16,6 +19,7 @@ def calcShannonEnt(dataSet): #calculate the shannon value
     return shannonEnt
 
 def createDataSet(): #the dataset, This is the main problem because I have not used the Yelp data
+    
     dataSet = [[1,1,1,'yes'],
                [1,1,0,'yes'],
                [1,0,1,'no'],
@@ -77,19 +81,148 @@ def createTree(dataSet, labels):
         myTree[bestFeatLabel][value] = createTree(splitDataSet(dataSet, bestFeat, value), subLabels)
     return myTree
 
-def classify(inputTree, featLabels, testVec): #Travers the decision tree to get the result
+def classify(inputTree, featLabels, testVecs): #Travers the decision tree to get the result
     firstStr = inputTree.keys()[0]
     secondDict = inputTree[firstStr]
     featIndex = featLabels.index(firstStr)
-    for key in secondDict.keys():
-        if testVec[featIndex] == key:
-            if type(secondDict[key]).__name__ == 'dict':
-                classLabel = classify(secondDict[key], featLabels, testVec)
-            else: classLabel = secondDict[key]
-    return classLabel
+    classLabels = []
+    for testVec in testVecs:
+        for key in secondDict.keys():
+            if testVec[featIndex] == key:
+                if type(secondDict[key]).__name__ == 'dict':
+                    classLabel = classify(secondDict[key], featLabels, testVec)
+                    classLabels.append(classLabel)
+                else: 
+                    classLabel = secondDict[key]
+                    classLabels.append(classLabel)
+    return classLabels
 
-myDat, labels = createDataSet()
-myTree = createTree(myDat,labels)
-print myTree
-myDat, labels = createDataSet() # Because labels have been deleted in creat tree
-print classify(myTree,labels,[0,0,0])
+if __name__ == '__main__':
+    #if '1' == '1':
+    #    print "Rubbish!"
+    file_dataset_word_frequency = '/Users/luotianyi/Desktop/CMPS242/project/'\
+    'word_all_frequency_40000_20161105'
+    file_dataset_train = '/Users/luotianyi/Desktop/CMPS242/project/'\
+    'traindata_20161103'
+    file_dataset_test = '/Users/luotianyi/Desktop/CMPS242/project/'\
+    'testdata_20161103'
+    word_diction = {} #word dictionary
+    line_num = 0
+    for line in open(file_dataset_word_frequency, 'r'):
+        line_num += 1
+        line_str_list = line.replace("\n", "").split("\t")
+        word_diction[line_str_list[0]] = line_str_list[1]
+    
+    #construct the vector representation with the feature of naive bayes
+    train_vectors = []
+    test_vectors = []
+    ylabels_train = []
+    labels = []
+    test_ylabels = []
+    line_num = 0
+    #####################################
+    #train tfidf feature construction
+    #####################################
+    for line in open(file_dataset_train, 'r'):
+        line_num += 1
+        if line_num % 5000 == 0:
+            print "Triansets-" + str(line_num) + " lines are handled"
+        #print "train_" + str(line_num)
+        line_str_list = line.replace("\n", "").split("\t")
+        temp_words_feature = []
+        temp_text = line_str_list[1]
+        ylabels_train.append(line_str_list[0])
+        temp_words_list = temp_text.split(" ")
+        for temp_word in word_diction:
+            if line_num == 1:
+                labels.append(temp_word)
+            if str(temp_word) in temp_words_list:
+                temp_words_feature.append(1.0 * (int(temp_words_list.count(str(temp_word)))))
+            else:
+                temp_words_feature.append(0.0)
+        train_vectors.append(array(temp_words_feature))
+    train_vectors_matrix = array(train_vectors)
+    #print train_vectors_matrix[0]
+    transformer = TfidfTransformer(smooth_idf=False)
+    tfidf_train = transformer.fit_transform(train_vectors_matrix)
+    train_tfidf_array = tfidf_train.toarray()
+    train_ylabels_array = array(ylabels_train)
+    print "Train tfidf feature construction finish!"
+    #####################################
+    #test tfidf feature construction
+    #####################################
+    line_num = 0
+    for line in open(file_dataset_test, 'r'):
+        line_num += 1
+        if line_num % 5000 == 0:
+            print "Testsets-" + str(line_num) + " lines are handled"
+        #print "test_" + str(line_num)
+        line_str_list = line.replace("\n", "").split("\t")
+        temp_words_feature = []
+        temp_text = line_str_list[1]
+        test_ylabels.append(line_str_list[0])
+        temp_words_list = temp_text.split(" ")
+        for temp_word in word_diction:
+            #labels.append(temp_word)
+            if str(temp_word) in temp_words_list:
+                temp_words_feature.append(1.0 * (int(temp_words_list.count(str(temp_word)))))
+            else:
+                temp_words_feature.append(0.0)
+        test_vectors.append(array(temp_words_feature))
+    test_vectors_matrix = array(test_vectors)
+    #print test_vectors_matrix[0]
+    transformer = TfidfTransformer(smooth_idf=False)
+    tfidf_test = transformer.fit_transform(test_vectors_matrix)
+    test_tfidf_array = tfidf_test.toarray()
+    test_ylabels_array = array(test_ylabels)
+    print "Test tfidf feature construction finish!"
+    print labels
+    print len(labels)
+    #####################################
+    #train dataset tranformation of decision tree
+    #####################################
+    train_dataSet = []
+    for index_dataset in range(len(train_ylabels_array)):
+        temp_single_dataset = []
+        temp_dataset = train_tfidf_array[index_dataset]
+        for index_temp_dataset in range(len(temp_dataset)):
+            if temp_dataset[index_temp_dataset] >= 0.5:
+                temp_single_dataset.append(1)
+            else:
+                temp_single_dataset.append(0)
+        if train_ylabels_array[index_dataset] == '1':
+            temp_single_dataset.append('yes')
+        else:
+            temp_single_dataset.append('no')            
+        train_dataSet.append(temp_single_dataset)
+    #####################################
+    #test dataset tranformation of decision tree
+    #####################################
+    test_dataSet = []
+    for index_dataset in range(len(test_ylabels_array)):
+        temp_single_dataset = []
+        temp_dataset = test_tfidf_array[index_dataset]
+        for index_temp_dataset in range(len(temp_dataset)):
+            if temp_dataset[index_temp_dataset] >= 0.5:
+                temp_single_dataset.append(1)
+            else:
+                temp_single_dataset.append(0)
+        if test_ylabels_array[index_dataset] == '1':
+            temp_single_dataset.append('yes')
+        else:
+            temp_single_dataset.append('no')            
+        test_dataSet.append(temp_single_dataset)
+    #####################################
+    #get the performance of test dataset
+    #####################################
+    test_right_num = 0
+    myTree = createTree(train_dataSet,labels)
+    print "Creating tree is finished!"
+    predict_test_labels = classify(myTree,labels,test_dataSet)
+    print "Predicting is finished!"
+    predict_test_labels_array = array(predict_test_labels)
+    for index_item_label in range(test_ylabels_array):
+        if test_ylabels_array[index_item_label] == predict_test_labels_array[index_item_label]:
+            test_right_num += 1
+    print "The classification accuracy of test dataset is(decision_tree):"
+    print 1.0 * test_right_num / len(test_ylabels_array)
