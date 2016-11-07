@@ -62,7 +62,7 @@ if __name__ == '__main__':
                 else: 
                     if temp_word not in stop_words_list:
                         temp_string += temp_word + " "
-            temp_result_str = '1' + '\t' + temp_string
+            temp_result_str = '0' + '\t' + temp_string
             if line_valid_data <= 1711125:
                 f_write_dataset_train.write(temp_result_str.encode('utf-8'))
             else:
