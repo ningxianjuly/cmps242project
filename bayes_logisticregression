@@ -9,27 +9,16 @@ from sklearn.feature_extraction.text import TfidfTransformer
 import math
 from scipy.optimize import minimize
 
-def logistic_prob(X, w):
-    trunc = 8.  # exp(8)/(1+exp(8)) = 0.9997 which is close enough to 1 as to not matter in most cases.
-    z = numpy.dot(X, w)
-    z = numpy.clip(z, -trunc, trunc)
-    pr = numpy.exp(z)
-    pr = pr / (1. + pr)
-
-    return pr
-
-def cal_sigmoid(train_tfidf_array_index_X, initial_theta):
-    linear_multiply_value = 0.0
-    sigmoid_value = 0.0
-    for index_X in range(len(train_tfidf_array_index_X)):
-        linear_multiply_value += train_tfidf_array_index_X[index_X] * initial_theta[index_X]
-    sigmoid_value = 1.0 / (1.0 + math.exp(-1.0*linear_multiply_value))
+def cal_sigmoid(X, w):
+    linear_multiply_value = numpy.dot(X, w)
+    exp_prob = numpy.exp(linear_multiply_value)
+    sigmoid_value = exp_prob / (1.0 + exp_prob)
     return sigmoid_value
 
 def cost(w, w_prior, H, y_temp, X_temp):
     X = numpy.array(X_temp,dtype=float)
     y = numpy.array(y_temp,dtype=float)
-    mu = logistic_prob(X, w)
+    mu = cal_sigmoid(X, w)
     #temp_x = numpy.dot(y.T, numpy.log(mu))
     #print temp_x
     cost_value = (-(numpy.dot(y.T, numpy.log(mu)) + numpy.dot((1.0 - y).T, numpy.log(1.0 - mu)))
@@ -39,51 +28,31 @@ def cost(w, w_prior, H, y_temp, X_temp):
 def gradient(w, w_prior, H, y_temp, X_temp):
     X = numpy.array(X_temp,dtype=float)
     y = numpy.array(y_temp,dtype=float)
-    mu = logistic_prob(X, w)
+    mu = cal_sigmoid(X, w)
     gradient_value = numpy.dot(X.T, (mu - y)) + numpy.dot(H, (w - w_prior))
     return gradient_value
     
 def hessian(w, w_prior, H, y, X):    
-    mu = logistic_prob(X, w)
+    mu = cal_sigmoid(X, w)
     S = mu * (1.0 - mu)
     hessian_value = numpy.dot(X.T, X * S[:, numpy.newaxis]) + H
     return hessian_value
     
 def fit_bayes_logistic(y, X, w_prior, H, max_iterartions = 10000):
-    # Do the regression
     results_optimize = minimize(cost, w_prior, args=(w_prior, H, y, X), jac=gradient, hess=hessian, method='Newton-CG', options={'maxiter': max_iterartions})
     w_fit = results_optimize.x
     H_fit = hessian(w_fit, w_prior, H, y, X)
-
     return w_fit, H_fit
 
-def bayes_logistic_prob(X, w, H):
-
-    # set a truncation exponent
-    trunc = 8.  # exp(8)/(1+exp(8)) = 0.9997 which is close enough to 1 as to not matter in most cases.
-
-    # unmoderated argument of exponent
-    z_a = numpy.dot(X, w)
-
-    H_inv_ = numpy.linalg.inv(H)
-    sig2_a = numpy.sum(X * numpy.dot(H_inv_, X.T).T, axis=1)
-
-    # get the moderation factor. Implicit in here is approximating the logistic sigmoid with
-    # a probit by setting the probit and sigmoid slopes to be equal at the origin. This is where
-    # the factor of pi/8 comes from.
-    kappa_sig2_a = 1. / numpy.sqrt(1. + 0.125 * numpy.pi * sig2_a)
-
-    # calculate the moderated argument of the logit
-    z = z_a * kappa_sig2_a
-
-    # do a truncation to prevent exp overflow
-    z = numpy.clip(z, -trunc, trunc)
-
-    # get the moderated logistic probability
-    pr = numpy.exp(z)
-    pr = pr / (1. + pr)
-
-    return pr
+def predict_bayes_logistic_prob(X, w, H):
+    linear_multiply_value_pre = numpy.dot(X, w)
+    hessian_inverse = numpy.linalg.inv(H)
+    variance = numpy.sum(X * numpy.dot(hessian_inverse, X.T).T, axis=1)
+    kappa_variance = 1.0 / numpy.sqrt(1. + 0.125 * numpy.pi * variance)
+    linear_multiply_value = linear_multiply_value_pre * kappa_variance
+    exp_prob = numpy.exp(linear_multiply_value)
+    sigmoid_value = exp_prob / (1.0 + exp_prob)
+    return sigmoid_value
 
 if __name__ == '__main__':
     file_dataset_word_frequency = '/Users/luotianyi/Desktop/CMPS242/project/'\
@@ -170,12 +139,12 @@ if __name__ == '__main__':
     #print len(labels)
     
     #train the bayes logistic regression
-    w_prior = numpy.zeros(len(word_diction))
+    w_prior = initial_theta#numpy.zeros(len(word_diction))
     H_prior = numpy.diag(numpy.ones(len(word_diction)))*0.001
     w_posterior, H_posterior = fit_bayes_logistic(train_ylabels_array, train_tfidf_array, w_prior, H_prior)
 
     print "Predicting..."
-    predict_test_prob_array = bayes_logistic_prob(test_tfidf_array, w_posterior, H_posterior)
+    predict_test_prob_array = predict_bayes_logistic_prob(test_tfidf_array, w_posterior, H_posterior)
     predict_test_labels = []
     item_num = 0
     test_right_num = 0
