@@ -119,16 +119,14 @@ if __name__ == '__main__':
                 temp_words_feature.append(0.0)
         test_vectors.append(array(temp_words_feature))
     test_vectors_matrix = array(test_vectors)
-    #print test_vectors_matrix[0]
     transformer = TfidfTransformer(smooth_idf=False)
     tfidf_test = transformer.fit_transform(test_vectors_matrix)
     test_tfidf_array = tfidf_test.toarray()
     test_ylabels_array = array(test_ylabels)
     print "Test tfidf feature construction finish!"
     print labels
-    #print len(labels)
     #####################################
-    #train dataset tranformation of decision tree
+    #train dataset format construction
     #####################################
     train_dataSet = []
     for index_dataset in range(len(train_ylabels_array)):
@@ -142,7 +140,7 @@ if __name__ == '__main__':
             temp_single_dataset.append(-1)            
         train_dataSet.append(temp_single_dataset)
     #####################################
-    #test dataset tranformation of decision tree
+    #test dataset format construction
     #####################################
     test_dataSet = []
     for index_dataset in range(len(test_ylabels_array)):
