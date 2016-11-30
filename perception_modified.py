@@ -4,7 +4,7 @@ from numpy import *
 from sklearn.feature_extraction.text import TfidfTransformer
 import math
 
-""" Given input X, compute output """
+""" Given input X, compute output 1/-1"""
 def predict_result (X, W, b, learning_rate):
     y = 0.0
     for index in range(len(X)):
@@ -15,23 +15,24 @@ def predict_result (X, W, b, learning_rate):
     else :
         return -1;
 
+"""train parameters based on dataset"""
 def train (train_dataSet, W, b, learning_rate):
-    ''' iterate at most 1000 times '''   
+    ''' iterate at most 10000 times '''   
     for i in range (1, 10000) : 
         print i
         error = 0.0
         for item_x in train_dataSet: 
-            X = item_x[0:len(item_x) - 1]
-            label = item_x[len(item_x) - 1]
+            X = item_x[0:len(item_x) - 1]#store index = 0 to len-2 of item_x into X
+            label = item_x[len(item_x) - 1]#store last one into label
             y = predict_result(X, W, b, learning_rate)
-            #if y is misclassified, we update the weights
+            #if y is misclassified, we update the weights(Parameters w b)
             if label != y :
                 error +=  1
                 y = 0.0
                 for index in range(len(X)):
                     y += W[index] * X[index]
-                    W[index] = W[index] + learning_rate * label * X[index]
-                b = b + learning_rate * label  
+                    W[index] = W[index] + learning_rate * label * X[index]#update parameters
+                b = b + learning_rate * label  #update parameters
             #print "W:" + str(W)
             #print "b:" + str(b)   
         print "The number of error:" + str(error)   
@@ -158,7 +159,7 @@ if __name__ == '__main__':
     #train the perception
     #####################################
     print "Training..."
-    trained_W, trained_b = train(train_dataSet, W, b, learning_rate)
+    trained_W, trained_b = train(train_dataSet, W, b, learning_rate)#get trained parameters
     print "Training is finished!"
     #####################################
     #test the perception
@@ -170,7 +171,7 @@ if __name__ == '__main__':
         label_test = item_x_test[len(item_x_test) - 1]
         y_test = predict_result(X_test, trained_W, trained_b, learning_rate)
         if label_test == y_test:
-            test_right_num += 1
+            test_right_num += 1#get the number of correct tests
     print "Predicting is finished!"
     print "The classification accuracy of test dataset is(perception):"
-    print 1.0 * test_right_num / len(test_dataSet)
+    print 1.0 * test_right_num / len(test_dataSet)#get the correction rate
