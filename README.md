@@ -1,4 +1,4 @@
-# cmps242project
+# This is the implementations of several classfication algorithms in the Machine Learning course of UCSC.
 <p>
 word_dictionary_lr.py: The word dictionary generation python file for logistic regression.   
 </p>
