@@ -14,6 +14,27 @@ preprocess_yelp_dataset.py: Generate the training dataset and test dataset.
 naive_bayes.py: Naive bayes classification python file and get the classification accuracy of training dataset and test dataset.  
 </p>
 <p>
+KNN.py: knn classification python file and get the classification accuracy of training dataset and test dataset.  
+</p>
+<p>
+decision_tree.py: Decision Tree classification python file and get the classification accuracy of training dataset and test dataset.  
+</p>
+<p>
+perception.py: Perceptron classification python file and get the classification accuracy of training dataset and test dataset.  
+</p>
+<p>
+bayes_logisticregression.py: Bayes Logistic Regression classification python file and get the classification accuracy of training dataset and test dataset.  
+</p>
+<p>
+googolestopwords.py: The google stopwords file.
+</p>
+<p>
+test_logisticregression.py.py: The python unittest file to test the cal_sigmoid() function of logistic regression.
+</p>
+<p>
+roc_plot.py: The code of plotting the roc curve and calculating the auc value.
+</p>
+<p>
 <b>Perceptron:</b>
 </p>
 <p>
