@@ -26,7 +26,7 @@ perception.py: Perceptron classification python file and get the classification 
 bayes_logisticregression.py: Bayes Logistic Regression classification python file and get the classification accuracy of training dataset and test dataset.  
 </p>
 <p>
-googolestopwords.py: The google stopwords file.
+googole_stopwords.py: The google stopwords file.
 </p>
 <p>
 test_logisticregression.py.py: The python unittest file to test the cal_sigmoid() function of logistic regression.
@@ -71,7 +71,7 @@ roc_plot.py: The code of plotting the roc curve and calculating the auc value.
 3.Run the decision_tree.py to train the decision tree and use the tree to get the classication accuracy of test dataset.                   
 </p>
 <p>
-The decision feature we used :['great', 'good', 'like', 'just', 'get', 'food', 'one', 'place']
+The features we used :['great', 'good', 'like', 'just', 'get', 'food', 'one', 'place']
 </p>
 <p>
 <b>KNN:</b>
@@ -86,7 +86,7 @@ The decision feature we used :['great', 'good', 'like', 'just', 'get', 'food', '
 3.Run the KNN.py to train the decision tree and use the tree to get the classication accuracy of test dataset.   
 </p>
 <p>
-The decision feature we used :['a', 'and', 'the', 'i', 'to']
+The features we used :['a', 'and', 'the', 'i', 'to']
 </p>
 <b>Logistic Regression:</b>
 </p>
@@ -100,7 +100,7 @@ The decision feature we used :['a', 'and', 'the', 'i', 'to']
 3.Run the logisticregression.py to train the decision tree and use the tree to get the classication accuracy of test dataset.The proformance of the decision tree is as following:                    
 </p>
 <p>
-The decision feature we used :['great', 'good', 'like', 'just', 'get', 'food', 'one', 'place']
+The features we used :['great', 'good', 'like', 'just', 'get', 'food', 'one', 'place']
 </p>
 <b>Bayes Logistic Regression:</b>
 </p>
@@ -114,5 +114,5 @@ The decision feature we used :['great', 'good', 'like', 'just', 'get', 'food', '
 3.Run the bayes_logisticregressio.py to train the decision tree and use the tree to get the classication accuracy of test dataset.The proformance of the decision tree is as following:                    
 </p>
 <p>
-The decision feature we used :['great', 'good', 'like', 'just', 'get', 'food', 'one', 'place']
+The features we used :['great', 'good', 'like', 'just', 'get', 'food', 'one', 'place']
 </p>
