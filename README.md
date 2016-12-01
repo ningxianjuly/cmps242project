@@ -1,4 +1,4 @@
-# CMPS 242 Machine Learning project algothms implementation, Fall 2016 in UCSC
+# CMPS 242 Machine Learning Project Code, Fall 2016 in UCSC
 <p>
 These are the implementations of several classfication algorithms in the Machine Learning course of UCSC.
 </p>
